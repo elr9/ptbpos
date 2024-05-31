@@ -27,10 +27,10 @@ elif page == "Services":
                 "price": service_price
             }
             response = supabase.table('services').insert(data).execute()
-            if response.error:
-                st.error(f"Error adding service: {response.error.message}")
-            else:
+            if response.data:
                 st.success(f"Service Added: {service_name}, {service_price}")
+            else:
+                st.error(f"Error adding service: {response.error['message']}")
     
     # Display list of services
     response = supabase.table('services').select('*').execute()
@@ -58,10 +58,10 @@ elif page == "Customers":
                 "tel": customer_tel
             }
             response = supabase.table('customers').insert(data).execute()
-            if response.error:
-                st.error(f"Error adding customer: {response.error.message}")
-            else:
+            if response.data:
                 st.success(f"Customer Added: {customer_name}, {customer_email}, {customer_tel}")
+            else:
+                st.error(f"Error adding customer: {response.error['message']}")
     
     # Display list of customers
     response = supabase.table('customers').select('*').execute()
@@ -95,10 +95,10 @@ elif page == "Sales":
                     "amount": sale_amount
                 }
                 response = supabase.table('sales').insert(data).execute()
-                if response.error:
-                    st.error(f"Error recording sale: {response.error.message}")
-                else:
+                if response.data:
                     st.success(f"Sale Recorded: {sale_service}, {sale_customer}, {sale_payment_method}, {sale_amount}")
+                else:
+                    st.error(f"Error recording sale: {response.error['message']}")
     
     # Display list of sales
     response = supabase.table('sales').select('*').execute()
@@ -138,10 +138,10 @@ elif page == "Shift Closure":
                 "cash_end": shift_cash_end
             }
             response = supabase.table('shifts').insert(data).execute()
-            if response.error:
-                st.error(f"Error closing shift: {response.error.message}")
-            else:
+            if response.data:
                 st.success(f"Shift Closed by {shift_instructor}. Starting Cash: {shift_cash_start}, Ending Cash: {shift_cash_end}")
+            else:
+                st.error(f"Error closing shift: {response.error['message']}")
     
     # Display list of shifts
     response = supabase.table('shifts').select('*').execute()
