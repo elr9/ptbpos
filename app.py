@@ -19,7 +19,6 @@ elif page == "Services":
     # Add form to create new service
     with st.form("Add Service"):
         service_name = st.text_input("Service Name")
-        service_description = st.text_area("Service Description")
         service_price = st.number_input("Service Price", min_value=0.0, step=0.01)
         submitted = st.form_submit_button("Add Service")
         if submitted:
@@ -28,10 +27,10 @@ elif page == "Services":
                 "price": service_price
             }
             response = supabase.table('services').insert(data).execute()
-            if response.status_code == 201:
-                st.write(f"Service Added: {service_name}, {service_price}")
+            if response.error:
+                st.error(f"Error adding service: {response.error.message}")
             else:
-                st.error("Error adding service")
+                st.success(f"Service Added: {service_name}, {service_price}")
     
     # Display list of services
     response = supabase.table('services').select('*').execute()
@@ -49,18 +48,20 @@ elif page == "Customers":
     # Add form to create new customer
     with st.form("Add Customer"):
         customer_name = st.text_input("Customer Name")
-        customer_contact = st.text_input("Contact Information")
+        customer_email = st.text_input("Customer Email")
+        customer_tel = st.text_input("Customer Telephone")
         submitted = st.form_submit_button("Add Customer")
         if submitted:
             data = {
                 "name": customer_name,
-                "contact": customer_contact
+                "email": customer_email,
+                "tel": customer_tel
             }
             response = supabase.table('customers').insert(data).execute()
-            if response.status_code == 201:
-                st.write(f"Customer Added: {customer_name}, {customer_contact}")
+            if response.error:
+                st.error(f"Error adding customer: {response.error.message}")
             else:
-                st.error("Error adding customer")
+                st.success(f"Customer Added: {customer_name}, {customer_email}, {customer_tel}")
     
     # Display list of customers
     response = supabase.table('customers').select('*').execute()
@@ -94,10 +95,10 @@ elif page == "Sales":
                     "amount": sale_amount
                 }
                 response = supabase.table('sales').insert(data).execute()
-                if response.status_code == 201:
-                    st.write(f"Sale Recorded: {sale_service}, {sale_customer}, {sale_payment_method}, {sale_amount}")
+                if response.error:
+                    st.error(f"Error recording sale: {response.error.message}")
                 else:
-                    st.error("Error recording sale")
+                    st.success(f"Sale Recorded: {sale_service}, {sale_customer}, {sale_payment_method}, {sale_amount}")
     
     # Display list of sales
     response = supabase.table('sales').select('*').execute()
@@ -126,21 +127,21 @@ elif page == "Shift Closure":
     
     # Add form to close shift
     with st.form("Close Shift"):
-        shift_operator = st.text_input("Operator Name")
+        shift_instructor = st.text_input("Instructor Name")
         shift_cash_start = st.number_input("Starting Cash", min_value=0.0, step=0.01)
         shift_cash_end = st.number_input("Ending Cash", min_value=0.0, step=0.01)
         submitted = st.form_submit_button("Close Shift")
         if submitted:
             data = {
-                "operator": shift_operator,
+                "instructor": shift_instructor,
                 "cash_start": shift_cash_start,
                 "cash_end": shift_cash_end
             }
             response = supabase.table('shifts').insert(data).execute()
-            if response.status_code == 201:
-                st.write(f"Shift Closed by {shift_operator}. Starting Cash: {shift_cash_start}, Ending Cash: {shift_cash_end}")
+            if response.error:
+                st.error(f"Error closing shift: {response.error.message}")
             else:
-                st.error("Error closing shift")
+                st.success(f"Shift Closed by {shift_instructor}. Starting Cash: {shift_cash_start}, Ending Cash: {shift_cash_end}")
     
     # Display list of shifts
     response = supabase.table('shifts').select('*').execute()
