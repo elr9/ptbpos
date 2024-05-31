@@ -25,12 +25,11 @@ elif page == "Services":
         if submitted:
             data = {
                 "name": service_name,
-                "description": service_description,
                 "price": service_price
             }
             response = supabase.table('services').insert(data).execute()
             if response.status_code == 201:
-                st.write(f"Service Added: {service_name}, {service_description}, {service_price}")
+                st.write(f"Service Added: {service_name}, {service_price}")
             else:
                 st.error("Error adding service")
     
